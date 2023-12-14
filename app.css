@@ -54,6 +54,9 @@ body {
   background: #f0f0f0;
   padding: 2rem;
 }
+.game {
+  min-height: 80vh;
+}
 .not-allowed {
   cursor: not-allowed;
 }

@@ -1,12 +1,17 @@
 // @ts-check
 console.log("Let's learn Flexbox!");
-// TODO: Screen size check: < 1280px => Warning!
-// TODO: Replicate: https://codepen.io/kostasx/pen/VwZVOMJ
-// TODO: Replicate: https://codepen.io/kostasx/pen/wvwQbbd?editors=1100
+// TODO:
+// 1) Screen size check: < 1280px => Warning!
+// 2) Replicate: https://codepen.io/kostasx/pen/VwZVOMJ
+// 3) Replicate: https://codepen.io/kostasx/pen/wvwQbbd?editors=1100
 // https://codepen.io/kostasx/pen/OJLXyBw
-// TODO: LEVEL: INTERMEDIATE (HIDE/TOGGLE Samples) => LEVEL (ADVANCED): Hide Samples!!!
-// TODO: Update: Level 1 - Exercise 1 => Level 1 - Exercise 2 => Level 2 - Exercise 1
-// TODO: Ability to drop left-hand-side rules! (Beginner level)
+// 4) LEVEL: INTERMEDIATE (HIDE/TOGGLE Samples) => LEVEL (ADVANCED): Hide Samples!!!
+// 5) Update: Level 1 - Exercise 1 => Level 1 - Exercise 2 => Level 2 - Exercise 1
+// 6) Ability to drop left-hand-side rules! (Beginner level)
+// 7)
+// 7.1) When Screen width gets lower than accepted for playing the game, display warning modal (Please use a larger screen size, the game was not intended for small screen sizes and mobile devices)
+// 7.2) Add all Flexbox properties, categorized under Parent and Child 
+// 7.3) Keep track of CSS rules applied to the target element (visual-blocks)
 
 // https://cdnjs.com/libraries/dragula/3.6.6 (JS+CSS Required)
 const { clear, log } = console;
@@ -273,6 +278,11 @@ const propsList = {
   ]
 };
 let drake = null;
+let arrow = null;
+let gotoNextExercise = null;
+// EXERCISES DATA:
+let exercises = null;
+let exercisesLength;
 
 // PUBSUB
 const pubSub = (function(){
@@ -301,6 +311,28 @@ const pubSub = (function(){
 // HELPER FUNCTIONS:
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
+const template = ({ textContent, color }) => {
+  return `
+  <li data-style="${textContent}" class="css-prop bg-${color}-500 hover:bg-${color}-800 inline py-2 px-4 text-white cursor-pointer rounded-full">
+    ${textContent}
+  </li>
+  `
+};
+const sampleChapter = ({ title }) => {
+  return `<h2 class="font-bold px-2 text-2xl">${title}:</h2>`;
+}
+const sampleTemplate = ({ rule, ruleValue, className, color }) => {
+  return `
+    <h3 class="font-bold px-2 text-right mr-1">${ruleValue}</h3>
+    <div class="docs-draggable">
+      <div data-style="${`${rule}:${ruleValue}`}" class="docs p-1 flex bg-${color}-500 ${className} m-2" id="${ruleValue}">
+        <div class="docs-block">A</div>
+        <div class="docs-block">B</div>
+        <div class="docs-block">C</div>
+      </div>
+    <div>
+ `;
+}
 function renderSamplesToEl(propsList, el) {
   el.innerHTML = "";
   let counter = 0;
@@ -488,6 +520,9 @@ function reset() {
 }
 function initExercises(exercisesPack, startFrom = 0) {
 
+  renderPropsToEl(propsList, cssPropsEl);
+  renderSamplesToEl(propsList, $samplesList);
+
   // Get copy of pack of exercises
   const exercisesPackCopy = exercisesPack.slice(startFrom);
   // console.log(exercisesPackCopy);
@@ -495,19 +530,11 @@ function initExercises(exercisesPack, startFrom = 0) {
   // Get first pack and destructure metadata:
   // console.log(exercisesPackCopy[0]);
   const { level, title, cat, subcat, hints } = exercisesPackCopy[0];
+  exercises = exercisesPackCopy[0].exercises;
   let currentExercise = 0;
+  exercisesLength = exercises.length;
 
-  renderExercise({ 
-      level, 
-      title, 
-      cat, 
-      subcat, 
-      exerciseNum: ++currentExercise, 
-      hints,
-      exercise: exercisesPackCopy[0].exercises.shift()  
-  });
-
-  return function nextExercise() {
+  function nextExercise() {
     console.log("Jumping to next exercise...");
     renderExercise({ 
         level, 
@@ -516,9 +543,17 @@ function initExercises(exercisesPack, startFrom = 0) {
         subcat, 
         exerciseNum: ++currentExercise, 
         hints,
-        exercise: exercisesPackCopy[0].exercises.shift()  
+        exercise: exercises.shift()  
     });    
   }
+
+  nextExercise();
+  
+  // Guide
+  // @ts-ignore
+  arrow = createArrow('.css-prop:first-child', '#visual-blocks', "Drag CSS rule and drop it onto the parent element", { fromAnchor: "bottomCenter" });
+
+  return nextExercise;
 
 }
 function resetAppliedProp(e) {
@@ -665,28 +700,6 @@ const flexboxExercisesPack = [
   }
 ];
 
-// EXERCISES DATA:
-const exercises = [
-  {
-    parentClasses: "flex justify-between",
-    itemClasses: ""
-  },
-  {
-    parentClasses: "flex flex-row-reverse justify-between",
-    itemClasses: ""
-  },
-  {
-    parentClasses: "flex justify-between items-end",
-    itemClasses: ""
-  },
-  {
-    parentClasses: "flex justify-around",
-    itemClasses: ""
-  }
-];
-const exercisesLength = exercises.length;
-
-
 // DOM ELEMENTS
 const $initialContainer  = $("#initial");
 const cssPropsEl         = $("#css-props");
@@ -698,6 +711,7 @@ const $samplesList       = $("#samples-list");
 const $visualExpected    = $("#visual-expected");
 const $levelNum          = $("#level");
 const $exerciseNum       = $("#exercise");
+const $info              = $("#info");
 let visualBlocksDefaultClass;
 
 // SUBSCRIBERS:
@@ -710,71 +724,23 @@ pubSub.subscribe(EXERCISE_UPDATE, function(data) {
 });
 // pubSub.remove();
 
-const gotoNextExercise = initExercises(flexboxExercisesPack);
-// initExercises(flexboxExercisesPack, 1); // TEST
-
-const template = ({ textContent, color }) => {
-  return `
-  <li data-style="${textContent}" class="css-prop bg-${color}-500 hover:bg-${color}-800 inline py-2 px-4 text-white cursor-pointer rounded-full">
-    ${textContent}
-  </li>
-  `
-};
-const sampleChapter = ({ title }) => {
-  return `<h2 class="font-bold px-2 text-2xl">${title}:</h2>`;
-}
-const sampleTemplate = ({ rule, ruleValue, className, color }) => {
-  return `
-    <h3 class="font-bold px-2 text-right mr-1">${ruleValue}</h3>
-    <div class="docs-draggable">
-      <div data-style="${`${rule}:${ruleValue}`}" class="docs p-1 flex bg-${color}-500 ${className} m-2" id="${ruleValue}">
-        <div class="docs-block">A</div>
-        <div class="docs-block">B</div>
-        <div class="docs-block">C</div>
-      </div>
-    <div>
- `;
-}
-const initialFlexboxParent = () => {
-
-  // const emmetEl = expand(`div#visual-blocks[data-class="draggable"].block.p-4.shadow-lg>div.block{Logo}+div.block{Menu}+div.block{Logout}`);
-
-  return `
-    <div id="visual-blocks" data-class="draggable" class="block p-4 shadow-lg">
-      <div class="block">Logo</div>
-      <div class="block">Menu</div>
-      <div class="block">Logout</div>
-    </div>
-  `
-}
-
-renderPropsToEl(propsList, cssPropsEl);
-renderSamplesToEl(propsList, $samplesList);
-// renderExercise(exercises.shift());
-
 // PROBLEM: @ts-check + Global Variable + Cannot find name 'dragula'
 // SOLUTION: npm install @types/dragula --save 
 drake = dragula([...getDraggables()], { copy: true });
 initDrakeEvents();
 
-// Guide
-let arrow = createArrow('.css-prop:first-child', '#visual-blocks', "Drag CSS rule and drop it onto the parent element",
-  {
-    DISABLED_toAnchor: "bottomRight",
-    fromAnchor: "bottomCenter",
-    DISABLED_toGravity: "topLeft"
-  }
-);
 let currentlyDraggedEl = null;
-
 
 $resetBtn.addEventListener("click", reset);
 cssPropsEl.addEventListener("click", resetAppliedProp);
+$info.addEventListener("click", e =>{
 
-// TODO:
-// 1) When Screen width gets lower than accepted for playing the game, display warning modal (Please use a larger screen size, the game was not intended for small screen sizes and mobile devices)
-// 2) Add all Flexbox properties, categorized under Parent and Child 
-// 3) Keep track of CSS rules applied to the target element (visual-blocks)
+  $info.innerHTML = "";
+  $info.removeAttribute("class");
+  gotoNextExercise = initExercises(flexboxExercisesPack);
+  // initExercises(flexboxExercisesPack, 1); // TEST
+
+});
 
 // ANIMATION
 animation: {
