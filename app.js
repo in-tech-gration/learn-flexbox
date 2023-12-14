@@ -485,6 +485,7 @@ function checkMatch(exercises, exercisesLength) {
       $expected.classList.add("matched");
       const percentage = 100 - ((exercises.length / exercisesLength) * 100);
       $progress.style.width = percentage + "%";
+      $miniProgress.style.width = percentage + "%";
       // Do we have more exercises to show for this level?
       if (exercises.length > 0) {
         setTimeout(() => {
@@ -712,6 +713,7 @@ const $visualExpected    = $("#visual-expected");
 const $levelNum          = $("#level");
 const $exerciseNum       = $("#exercise");
 const $info              = $("#info");
+const $miniProgress      = $("#level-info__bg"); 
 let visualBlocksDefaultClass;
 
 // SUBSCRIBERS:
