@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Let's Learn Flexbox | intechgration.io</title>
+  <link rel="stylesheet" href="libs/dragula.min.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <div class="animated-text">
+    <h1 class="txt-pop">FLEXBOX</h1>
+    <div class="wrapper"></div>
+  </div>
+
+  <canvas id="canvas"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
+  <div id="progress"></div>
+  <main class="flex max-w-screen-2xl DISABLED_max-w-7xl m-auto DISABLED__h-full gap-4">
+
+    <!-- VISUAL SAMPLES   -->
+    <section id="samples" class="overflow-y-auto bg-white shadow-lg docs w-2/5 border-4 border-indigo-500">
+      <h2 class="font-bold p-2 text-2xl">Level 1</h2>
+      <hr>
+      <!-- DYNAMIC CONTENT PLACED HERE -->
+      <div id="samples-list"></div>
+    </section>
+
+    <!-- PLAYGROUND -->
+    <section class="bg-white shadow-lg game flex flex-col flex-grow gap-4 border-4 border-black p-2">
+      <section id="visual-expected" class="p-4 visual border-4 h-3/4">
+
+        <h2 class="p-2 font-bold">Make this...</h2>
+
+        <div id="visual-blocks" data-class="draggable" class="block p-4 shadow-lg">
+          <div class="block">Logo</div>
+          <div class="block">Menu</div>
+          <div class="block">Logout</div>
+        </div>
+
+        <!-- DYNAMIC CONTENT HERE: -->
+        <h2 class="p-2 font-bold">...look like this</h2>
+
+      </section>
+
+      <!-- CONTROLS -->
+      <section class="controls border-4 p-2">
+        <button id="reset"
+          class="hover:bg-gray-500 hover:text-white border-4 py-1 px-4 font-bold rounded-full">Reset</button>
+      </section>
+
+      <!-- DRAGGABLE RULES -->
+      <section class="blocks border-4 h-1/4 p-2">
+        <ul id="css-props" data-class="draggable" class="flex-parent-props flex flex-wrap gap-2"></ul>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.6.6/dragula.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

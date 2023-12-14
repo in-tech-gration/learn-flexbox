@@ -1,0 +1,110 @@
+/* ANIMATION START */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800,900');
+.animated-text h1 {
+  font-family: 'Montserrat', sans-serif !important;
+  margin: 1rem auto -2rem auto;
+  text-align: center;
+  color: white;
+  font-size: 100px;
+  font-weight: bold;
+}
+.animated-text .wrapper {
+  margin: 0 auto;
+  display: inline-block;
+  position: absolute;
+  left: 35%;
+}
+.animated-text h1.inner {
+  margin: 0;
+  font-size: 80px;
+  display: inline-block;
+}
+.animated-text .txt-pop {
+  animation: text-pop-up-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+@keyframes text-pop-up-top {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    text-shadow: none;
+  }
+  100% {
+    -webkit-transform: translateY(-50px);
+            transform: translateY(-50px);
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    text-shadow: 0 1px 0 #cccccc, 0 2px 0 #cccccc, 0 3px 0 #cccccc, 0 4px 0 #cccccc, 0 5px 0 #cccccc, 0 6px 0 #cccccc, 0 7px 0 #cccccc, 0 8px 0 #cccccc, 0 9px 0 #cccccc, 0 50px 30px rgba(0, 0, 0, 0.3);
+  }
+}
+/* ANIMATION END  */
+
+/* CONFETTI */
+#canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+}
+
+* { box-sizing: border-box; }
+body {
+  height: 100vh;
+  background: #f0f0f0;
+  padding: 2rem;
+}
+.not-allowed {
+  cursor: not-allowed;
+}
+#progress {
+  background: limegreen;
+  height: 10px;
+  position: fixed;
+  top:0;
+  z-index: 1000;
+  left: 0;
+  width: 0%;
+  transition: all 1s linear;
+}
+.block {
+  outline: 2px solid gray;
+}
+#visual-blocks, #expected {
+  transition: all 200ms linear;
+    height: 8rem;
+}
+#expected .block, 
+#visual-blocks .block {
+  background: white;
+  padding: 0.25rem;
+}
+#samples {
+  max-height: 80vh;
+}
+#samples .docs {
+  height: 4rem;
+  transition: all 400ms linear;
+}
+.docs-block {
+  background: rgba(0,0,0,0.25);
+  padding: 0.25rem 0.5rem;
+}
+.matched {
+  outline: 4px solid limegreen;
+  box-shadow: 0 0 24px limegreen;
+}
+/* CUSTOM SCROLL BARS */
+#samples::-webkit-scrollbar {
+  width: 1em;
+  background: lightgray;
+}
+#samples::-webkit-scrollbar-track {
+/*   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+}
+#samples::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  background-color: rgb(99 102 241);
+  outline: 1px solid slategrey;
+  outline: 1px solid transparent;
+}
