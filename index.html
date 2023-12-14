@@ -24,7 +24,10 @@
 
     <!-- VISUAL SAMPLES   -->
     <section id="samples" class="overflow-y-auto bg-white shadow-lg docs w-2/5 border-4 border-indigo-500">
-      <h2 class="font-bold p-2 text-2xl">Level 1</h2>
+      <h2 class="font-bold p-2 text-xl bg-lime-400">
+        Level: <span id="level"></span>
+        - Exercise: <span id="exercise"></span>
+      </h2>
       <hr>
       <!-- DYNAMIC CONTENT PLACED HERE -->
       <div id="samples-list"></div>
@@ -34,16 +37,19 @@
     <section class="bg-white shadow-lg game flex flex-col flex-grow gap-4 border-4 border-black p-2">
       <section id="visual-expected" class="p-4 visual border-4 h-3/4">
 
-        <h2 class="p-2 font-bold">Make this...</h2>
-
-        <div id="visual-blocks" data-class="draggable" class="block p-4 shadow-lg">
-          <div class="block">Logo</div>
-          <div class="block">Menu</div>
-          <div class="block">Logout</div>
+        <div id="initial">
+          <!-- <h2 class="p-2 font-bold">Make this...</h2>
+          <div id="visual-blocks" data-class="draggable" class="block p-4 shadow-lg">
+            <div class="block">Logo</div>
+            <div class="block">Menu</div>
+            <div class="block">Logout</div>
+          </div> -->
         </div>
 
         <!-- DYNAMIC CONTENT HERE: -->
-        <h2 class="p-2 font-bold">...look like this</h2>
+        <div id="expected-container">
+          <!-- <h2 class="p-2 font-bold">...look like this</h2> -->
+        </div>
 
       </section>
 
@@ -60,6 +66,7 @@
     </section>
   </main>
 
+  <script src="emmet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.6.6/dragula.min.js"></script>
   <script src="app.js"></script>
 </body>

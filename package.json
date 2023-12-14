@@ -1,0 +1,16 @@
+{
+  "name": "learn-flexbox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "emmet": "^2.4.6"
+  },
+  "dependencies": {
+    "@types/dragula": "^3.7.4"
+  }
+}
