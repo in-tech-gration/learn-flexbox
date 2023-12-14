@@ -319,7 +319,11 @@ const template = ({ textContent, color }) => {
   `
 };
 const sampleChapter = ({ title }) => {
-  return `<h2 class="font-bold px-2 text-2xl">${title}:</h2>`;
+  return `
+    <h2 class="font-bold px-2 text-xl underline hover:text-blue-700">
+      <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/${title}" target="_blank">${title}:</a>
+    </h2>
+  `;
 }
 const sampleTemplate = ({ rule, ruleValue, className, color }) => {
   return `
@@ -518,8 +522,17 @@ function reset() {
   $draggableSamples.forEach(el => el.querySelector(".docs").removeAttribute("style"));
   $visualBlocks.classList.remove("matched");
   $expected.classList.remove("matched");
+
+  const canvas = document.createElement("canvas");
+  canvas.setAttribute("id", "canvas");
+  const currentCanvas = document.body.querySelector("canvas#canvas");
+  if ( currentCanvas ) currentCanvas.replaceWith(canvas);
+
 }
 function initExercises(exercisesPack, startFrom = 0) {
+
+  $info.innerHTML = "";
+  $info.removeAttribute("class");
 
   renderPropsToEl(propsList, cssPropsEl);
   renderSamplesToEl(propsList, $samplesList);
@@ -646,11 +659,20 @@ const flexboxExercisesPack = [
         expected: `div#expected.block.p-4.shadow-lg.flex.justify-between>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
 
         points: 5
-      },
+      }
+    ],
+  },
+  {
+    level: 2,
+    title: null,
+    cat: "flexbox",
+    subcat: "parent-cross",
+    hints: HINTS.hidden,
+    exercises: [
       {
-        initial: `div#visual-blocks.block.p-4.shadow-lg>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
+        initial: `div#visual-blocks.block.p-4.shadow-lg>div.block.bg-green-200.!outline-none{Logo}+div.block.bg-green-400.!outline-none{Menu}+div.block.bg-green-600.!outline-none{Logout}`,
 
-        expected: `div#expected.block.p-4.shadow-lg.flex.justify-around>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
+        expected: `div#expected.block.p-4.shadow-lg.flex.justify-around>div.block.bg-green-200.!outline-none{Logo}+div.block.bg-green-400.!outline-none{Menu}+div.block.bg-green-600.!outline-none{Logout}`,
 
         points: 5
 
@@ -663,27 +685,6 @@ const flexboxExercisesPack = [
         points: 5
 
       },
-      {
-        initial: `div#visual-blocks.block.p-4.shadow-lg>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
-
-        expected: `div#expected.block.p-4.shadow-lg.flex.justify-between.flex-row-reverse>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
-
-        points: 5
-
-      }
-    ],
-  },
-  {
-    level: 2,
-    title: null,
-    cat: "flexbox",
-    subcat: "parent-cross",
-    hints: HINTS.hidden,
-    exercises: [
-      {
-        parentClasses: "flex justify-between items-end",
-        itemClasses: ""
-      }
     ]
   },
   {
@@ -694,8 +695,12 @@ const flexboxExercisesPack = [
     hints: HINTS.off,
     exercises: [
       {
-        parentClasses: "flex flex-row-reverse justify-between",
-        itemClasses: ""
+        initial: `div#visual-blocks.block.p-4.shadow-lg>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
+
+        expected: `div#expected.block.p-4.shadow-lg.flex.justify-between.flex-row-reverse>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
+
+        points: 5
+
       }
     ]
   }
@@ -737,12 +742,12 @@ $resetBtn.addEventListener("click", reset);
 cssPropsEl.addEventListener("click", resetAppliedProp);
 $info.addEventListener("click", e =>{
 
-  $info.innerHTML = "";
-  $info.removeAttribute("class");
   gotoNextExercise = initExercises(flexboxExercisesPack);
   // initExercises(flexboxExercisesPack, 1); // TEST
-
+  
 });
+
+gotoNextExercise = initExercises(flexboxExercisesPack);
 
 // ANIMATION
 animation: {

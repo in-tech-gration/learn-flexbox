@@ -16,15 +16,17 @@
     <div class="wrapper"></div>
   </div>
 
+  <!-- INSIGHT: pointer-events: none -->
   <canvas id="canvas"></canvas>
 
-  <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
   <div id="progress"></div>
   <main class="flex max-w-screen-2xl m-auto gap-4">
 
     <!-- VISUAL SAMPLES   -->
     <section id="samples" class="overflow-y-auto bg-white shadow-lg docs w-1/4 border-4 border-gray-500">
+      <!-- INSIGHT: position: sticky -->
       <h2 id="level-info" class="font-bold p-2 text-xl bg-gray-400">
+        <!-- INSIGHT: position: relative, absolute, progress background -->
         <div id="level-info__bg"></div>
         <div id="level-info__details">
           Level: <span id="level"></span>
@@ -56,6 +58,11 @@
           <!-- <h2 class="p-2 font-bold">...look like this</h2> -->
         </div>
 
+        <!-- CSS CODE SHOWS HERE -->
+        <div id="css-code" class="border-2 shadow-lg border-black p-4 my-4">
+          <code>div.flex-parent { display:flex; justify-content:center; }</code>
+        </div>
+
       </section>
 
       <!-- CONTROLS -->
@@ -71,6 +78,7 @@
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
   <script src="emmet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.6.6/dragula.min.js"></script>
   <script src="app.js"></script>
