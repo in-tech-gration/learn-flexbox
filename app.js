@@ -271,10 +271,10 @@ const $$ = document.querySelectorAll.bind( document );
 function renderSamplesToEl(propsList, el){
   el.innerHTML = "";
   let counter = 0;
-  Object.entries(propsList).forEach(([rule,entries]) =>{
-    el.insertAdjacentHTML("beforeEnd", sampleChapter({ title: rule }));
-    entries.forEach(({ rule, className, style }) =>{
-      el.insertAdjacentHTML("beforeEnd", sampleTemplate({ rule, className, color: colors[counter++ % colors.length] }));
+  Object.entries(propsList).forEach(([parentRule,entries]) =>{
+    el.insertAdjacentHTML("beforeEnd", sampleChapter({ title: parentRule }));
+    entries.forEach(({ rule:ruleValue, className, style }) =>{
+      el.insertAdjacentHTML("beforeEnd", sampleTemplate({ rule: parentRule, ruleValue, className, color: colors[counter++ % colors.length] }));
     })
   })
 }
@@ -466,7 +466,7 @@ const exercises       = [
 ];
 
 // DOM ELEMENTS
-const draggables      = $$('[data-class="draggable"]');
+const $draggables     = $$('[data-class="draggable"]');
 const visualBlocks    = $("#visual-blocks");
 const $progress       = $("#progress");
 const $visualExpected = $("#visual-expected");
@@ -476,19 +476,25 @@ const visualBlocksDefaultClass = visualBlocks.className;
 const $resetBtn       = $("#reset");
 const cssPropsEl      = $("#css-props");
 const template        = ({textContent, color})=> {
-  return `<li class="css-prop bg-${color}-500 hover:bg-${color}-800 inline py-2 px-4 text-white cursor-pointer rounded-full">${textContent}</li>`
+  return `
+  <li data-style="${textContent}" class="css-prop bg-${color}-500 hover:bg-${color}-800 inline py-2 px-4 text-white cursor-pointer rounded-full">
+    ${textContent}
+  </li>
+  `
 };
 const sampleChapter   = ({ title })=> {
   return `<h2 class="font-bold px-2 text-2xl">${title}:</h2>`;
 }
-const sampleTemplate  = ({ rule, className, color })=> {
+const sampleTemplate  = ({ rule, ruleValue, className, color })=> {
   return `
-    <h3 class="font-bold px-2">${rule}</h3>
-    <div class="docs p-1 flex bg-${color}-500 ${className} m-2" id="${rule}">
-      <div class="docs-block">A</div>
-      <div class="docs-block">B</div>
-      <div class="docs-block">C</div>
-    </div>
+    <h3 class="font-bold px-2">${ruleValue}</h3>
+    <div class="docs-draggable">
+      <div data-style="${`${rule}:${ruleValue}`}" class="docs p-1 flex bg-${color}-500 ${className} m-2" id="${ruleValue}">
+        <div class="docs-block">A</div>
+        <div class="docs-block">B</div>
+        <div class="docs-block">C</div>
+      </div>
+    <div>
  `;
 }
 // TODO: Screen size check: < 1280px => Warning!
@@ -497,12 +503,16 @@ const sampleTemplate  = ({ rule, className, color })=> {
 // https://codepen.io/kostasx/pen/OJLXyBw
 // TODO: LEVEL: INTERMEDIATE (HIDE/TOGGLE Samples) => LEVEL (ADVANCED): Hide Samples!!!
 // TODO: Update: Level 1 - Exercise 1 => Level 1 - Exercise 2 => Level 2 - Exercise 1
+// TODO: Ability to drop left-hand-side rules! (Beginner level)
 const exercisesLength = exercises.length;
-const drake = dragula([...draggables], { copy: true });
 
 renderPropsToEl(propsList, cssPropsEl);
 renderSamplesToEl(propsList, $samplesList);
 renderExercises(exercises.shift());
+
+const $props          = $$(".docs-draggable");
+const drake = dragula([...$props, ...$draggables], { copy: true });
+
 initExercises(flexboxExercisesPack,1);
 
 // Guide
@@ -561,7 +571,10 @@ drake
   // console.log(dragElBgClass);
   if ( target ){
     currentlyDraggedEl.style.opacity = 0.4;
-    target.setAttribute("style", (target.getAttribute('style') ? target.getAttribute('style') : "") + ";" + el.textContent );
+    const currentStyle      = (target.getAttribute('style') ? target.getAttribute('style') : "") + ";"
+    const styleToBeAppended = el.getAttribute("data-style").trim();
+    const newStyle = currentStyle + styleToBeAppended;
+    target.setAttribute( "style", newStyle );
   }
   
 })

@@ -57,6 +57,9 @@ body {
 .not-allowed {
   cursor: not-allowed;
 }
+.docs-draggable {
+  cursor: pointer;
+}
 #progress {
   background: limegreen;
   height: 10px;
