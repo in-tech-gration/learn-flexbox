@@ -282,6 +282,7 @@ let arrow = null;
 let gotoNextExercise = null;
 let music = null;
 let isPlaying = true;
+let debugMusicOff = true;
 // EXERCISES DATA:
 let exercises = null;
 let exercisesLength;
@@ -357,9 +358,11 @@ function createArrow(from, to, label, { fromAnchor, toAnchor, fromGravity, toGra
 
   const GRAVITY = 48;
   const CORNERS = {
+    leftCenter: { point: { x: 0, y: "50%" }, gravity: [-GRAVITY, -GRAVITY] },
     topLeft: { point: { x: 0, y: 0 }, gravity: [-GRAVITY, -GRAVITY] },
     topRight: { point: { x: '100%', y: 0 }, gravity: [GRAVITY, -GRAVITY] },
     bottomLeft: { point: { x: 0, y: '100%' }, gravity: [-GRAVITY, GRAVITY] },
+    topCenter: { point: { x: "50%", y: '0%' }, gravity: [-GRAVITY, GRAVITY] },
     bottomCenter: { point: { x: "50%", y: '100%' }, gravity: [-GRAVITY, GRAVITY] },
     bottomRight: { point: { x: '100%', y: '100%' }, gravity: [GRAVITY, GRAVITY] }
   };
@@ -386,7 +389,7 @@ function createArrow(from, to, label, { fromAnchor, toAnchor, fromGravity, toGra
         animation: false
       },
       // endSocket: "top",
-      // path: "straight",
+      path: "straight",
       dash: { animation: true },
       dropShadow: true,
       color: "#000",
@@ -510,9 +513,9 @@ function checkMatch(exercises, exercisesLength) {
         }
         if ( isPlaying ){
           const audio = new Audio("soundfx/mixkit-happy-crowd-cheer-975.wav");
-          audio.play();
+          !debugMusicOff && audio.play();
           const completed = new Audio("soundfx/mixkit-game-level-completed-2059.wav");
-          completed.play();
+          !debugMusicOff && completed.play();
         }
       }
     } else {
@@ -579,6 +582,9 @@ function initExercises(exercisesPack, startFrom = 0) {
   // Guide
   // @ts-ignore
   arrow = createArrow('.css-prop:first-child', '#visual-blocks', "Drag CSS rule and drop it onto the parent element", { fromAnchor: "bottomCenter" });
+  
+  // @ts-ignore
+  // arrow = createArrow('#samples-list .docs', '#visual-blocks', "Drag CSS rule and drop it onto the parent element", { fromAnchor: "leftCenter" });
 
   return nextExercise;
 
@@ -790,7 +796,7 @@ $info.addEventListener("click", e =>{
   setTimeout(()=>{
     music = new Audio("soundfx/mixkit-im-working-449.mp3");
     music.loop  = true;
-    music.play();
+    !debugMusicOff && music.play();
     $(".bar-c").classList.remove("noAnim");
     $(".bar-c").addEventListener("click", e =>{
       if ( isPlaying ){
