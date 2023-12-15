@@ -719,6 +719,7 @@ const $levelNum          = $("#level");
 const $exerciseNum       = $("#exercise");
 const $info              = $("#info");
 const $miniProgress      = $("#level-info__bg"); 
+const $cssCode           = $("#css-code");
 let visualBlocksDefaultClass;
 
 // SUBSCRIBERS:
@@ -742,12 +743,38 @@ $resetBtn.addEventListener("click", reset);
 cssPropsEl.addEventListener("click", resetAppliedProp);
 $info.addEventListener("click", e =>{
 
+  $("#visual-expected__bg").classList.add('!opacity-25');
+  $("#css-code").classList.remove("hidden");
+
+  var audio = new Audio("soundfx/mixkit-dagger-woosh-1487.wav");
+  audio.play();
+
+  setTimeout(()=>{
+    let isPlaying = true;
+    const music = new Audio("soundfx/mixkit-im-working-449.mp3");
+    music.loop  = true;
+    music.play();
+    $(".bar-c").classList.remove("noAnim");
+    $(".bar-c").addEventListener("click", e =>{
+      if ( isPlaying ){
+        isPlaying = false;
+        $(".bar-c").classList.add("noAnim");
+        music.pause();
+      } else {
+        isPlaying = true;
+        $(".bar-c").classList.remove("noAnim");
+        music.play();
+      }
+    });
+  }, 1000);
+
   gotoNextExercise = initExercises(flexboxExercisesPack);
   // initExercises(flexboxExercisesPack, 1); // TEST
   
 });
 
-gotoNextExercise = initExercises(flexboxExercisesPack);
+
+// gotoNextExercise = initExercises(flexboxExercisesPack);
 
 // ANIMATION
 animation: {
