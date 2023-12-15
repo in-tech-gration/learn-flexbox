@@ -280,6 +280,8 @@ const propsList = {
 let drake = null;
 let arrow = null;
 let gotoNextExercise = null;
+let music = null;
+let isPlaying = true;
 // EXERCISES DATA:
 let exercises = null;
 let exercisesLength;
@@ -484,6 +486,8 @@ function checkMatch(exercises, exercisesLength) {
       console.log("It's a Match!");
       // console.log($visualBlocks.outerHTML.toString());
       // console.log($expected.outerHTML.toString());
+      const audio = new Audio("soundfx/mixkit-sword-blade-swish-1506.wav");
+      audio.play();
 
       $visualBlocks.classList.add("matched");
       $expected.classList.add("matched");
@@ -501,6 +505,15 @@ function checkMatch(exercises, exercisesLength) {
       } else {
         // Check if we have another level to load exercises from
         confettis();
+        if ( music ){
+          music.pause();
+        }
+        if ( isPlaying ){
+          const audio = new Audio("soundfx/mixkit-happy-crowd-cheer-975.wav");
+          audio.play();
+          const completed = new Audio("soundfx/mixkit-game-level-completed-2059.wav");
+          completed.play();
+        }
       }
     } else {
       console.log("No match!");
@@ -660,6 +673,31 @@ const flexboxExercisesPack = [
 
         points: 5
       }
+      // TESTING
+      // ,{
+      //   initial: `div#visual-blocks.block.p-4.shadow-lg>div.block.bg-green-200.!outline-none{Logo}+div.block.bg-green-400.!outline-none{Menu}+div.block.bg-green-600.!outline-none{Logout}`,
+
+      //   expected: `div#expected.block.p-4.shadow-lg.flex.justify-around>div.block.bg-green-200.!outline-none{Logo}+div.block.bg-green-400.!outline-none{Menu}+div.block.bg-green-600.!outline-none{Logout}`,
+
+      //   points: 5
+
+      // },
+      // {
+      //   initial: `div#visual-blocks.block.p-4.shadow-lg>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
+
+      //   expected: `div#expected.block.p-4.shadow-lg.flex.justify-between.items-end>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
+
+      //   points: 5
+
+      // },
+      // {
+      //   initial: `div#visual-blocks.block.p-4.shadow-lg>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
+
+      //   expected: `div#expected.block.p-4.shadow-lg.flex.justify-between.flex-row-reverse>div.block{Logo}+div.block{Menu}+div.block{Logout}`,
+
+      //   points: 5
+
+      // }      
     ],
   },
   {
@@ -746,12 +784,11 @@ $info.addEventListener("click", e =>{
   $("#visual-expected__bg").classList.add('!opacity-25');
   $("#css-code").classList.remove("hidden");
 
-  var audio = new Audio("soundfx/mixkit-dagger-woosh-1487.wav");
+  const audio = new Audio("soundfx/mixkit-dagger-woosh-1487.wav");
   audio.play();
 
   setTimeout(()=>{
-    let isPlaying = true;
-    const music = new Audio("soundfx/mixkit-im-working-449.mp3");
+    music = new Audio("soundfx/mixkit-im-working-449.mp3");
     music.loop  = true;
     music.play();
     $(".bar-c").classList.remove("noAnim");
