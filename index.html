@@ -17,140 +17,21 @@
     <div class="wrapper"></div>
   </div>
 
+  <!-- DEBUG MODE -->
+  <button id="debug-mode" class="hidden">Debug Mode is On</button>
+
   <!-- INSIGHT: pointer-events: none -->
   <canvas id="canvas"></canvas>
 
   <div id="progress"></div>
   <main class="flex max-w-screen-2xl m-auto gap-4 relative">
 
+    <!-- CODE EDITOR -->
+    <button id="editor-switch">
+      Code Editor
+    </button>
+    
     <!-- SOUND -->
-    <style>
-      .bar-c {
-        overflow: hidden;
-        height: 30px;
-        width: 40px;
-        margin: 0 auto;
-        cursor: pointer;
-        position: absolute;
-        top: -2.5rem;
-        right: 0;
-      }
-
-      .bar {
-        height: 1px;
-        width: 3px;
-        display: inline-block;
-        background-color: black;
-        bottom: 0;
-        position: absolute;
-        animation-duration: 500ms;
-        animation-play-state: running;
-        animation-direction: alternate;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-      }
-
-      .noAnim .bar {
-        animation: none;
-        animation-name: none;
-      }
-
-      .bar#bar-1 {
-        left: 0;
-        animation-name: danceHeight1;
-        animation-delay: 0ms;
-      }
-
-      .bar#bar-2 {
-        left: 6px;
-        animation-name: danceHeight2;
-        animation-delay: 300ms;
-      }
-
-      .bar#bar-3 {
-        left: 12px;
-        animation-name: danceHeight3;
-        animation-delay: 600ms;
-      }
-
-      .bar#bar-4 {
-        left: 18px;
-        animation-name: danceHeight4;
-        animation-delay: 900ms;
-      }
-
-      .bar#bar-5 {
-        left: 24px;
-        animation-name: danceHeight5;
-        animation-delay: 1200ms;
-      }
-
-      .bar#bar-6 {
-        left: 30px;
-        animation-name: danceHeight6;
-        animation-delay: 1500ms;
-      }
-
-      @keyframes danceHeight1 {
-        from {
-          height: 1px;
-        }
-
-        to {
-          height: 22px;
-        }
-      }
-
-      @keyframes danceHeight2 {
-        from {
-          height: 1px;
-        }
-
-        to {
-          height: 15px;
-        }
-      }
-
-      @keyframes danceHeight3 {
-        from {
-          height: 1px;
-        }
-
-        to {
-          height: 30px;
-        }
-      }
-
-      @keyframes danceHeight4 {
-        from {
-          height: 1px;
-        }
-
-        to {
-          height: 20px;
-        }
-      }
-
-      @keyframes danceHeight5 {
-        from {
-          height: 1px;
-        }
-
-        to {
-          height: 15px;
-        }
-      }
-
-      @keyframes danceHeight6 {
-        from {
-          height: 1px;
-        }
-
-        to {
-          height: 15px;
-        }
-      }
-    </style>
     <div class="bar-c noAnim">
       <div id="bar-1" class="bar"></div>
       <div id="bar-2" class="bar"></div>
@@ -162,7 +43,7 @@
     <!-- SOUND -->
 
     <!-- VISUAL SAMPLES   -->
-    <section id="samples" class="overflow-y-auto bg-white shadow-lg docs w-1/4 border-4 border-gray-500">
+    <section id="samples" class="overflow-y-auto bg-white shadow-lg docs w-1/4 border-4 border-black">
       <!-- INSIGHT: position: sticky -->
       <h2 id="level-info" class="font-bold p-2 text-xl bg-gray-400">
         <!-- INSIGHT: position: relative, absolute, progress background -->
@@ -178,52 +59,71 @@
     </section>
 
     <!-- PLAYGROUND -->
-    <section class="bg-white shadow-lg game flex flex-col w-3/4 gap-4 border-4 border-black p-2">
-      <section id="visual-expected" class="p-4 visual border-4 h-3/4">
+    <div class="scene w-3/4">
 
-        <div id="visual-expected__bg"></div>
-
-        <div id="initial">
-          <!-- <h2 class="p-2 font-bold">Make this...</h2>
-          <div id="visual-blocks" data-class="draggable" class="block p-4 shadow-lg">
-            <div class="block">Logo</div>
-            <div class="block">Menu</div>
-            <div class="block">Logout</div>
-          </div> -->
+      <div class="card">
+        <div class="card__face card__face--front">
+          <section class="bg-white shadow-lg game flex h-full flex-col DISABLEw-3/4 gap-4 border-4 border-black p-2">
+            <section id="visual-expected" class="p-4 visual border-4 h-3/4">
+      
+              <div id="visual-expected__bg"></div>
+      
+              <div id="initial">
+                <!-- <h2 class="p-2 font-bold">Make this...</h2>
+                <div id="visual-blocks" data-class="draggable" class="block p-4 shadow-lg">
+                  <div class="block">Logo</div>
+                  <div class="block">Menu</div>
+                  <div class="block">Logout</div>
+                </div> -->
+              </div>
+      
+              <div
+                class="DISABLED_bg-lime-400 h-full grid text-2xl cursor-pointer font-bold DISABLED_place-items-center items-center ml-1"
+                id="info">Press click to start the game!</div>
+      
+              <!-- DYNAMIC CONTENT HERE: -->
+              <div id="expected-container">
+                <!-- <h2 class="p-2 font-bold">...look like this</h2> -->
+              </div>
+      
+              <!-- CSS CODE SHOWS HERE -->
+              <div id="css-code" class="hidden border-2 shadow-lg border-black p-4 my-4">
+                <code>div.flex-parent { display:flex; justify-content:center; }</code>
+              </div>
+      
+            </section>
+      
+            <!-- CONTROLS -->
+            <section class="controls border-4 p-2">
+              <button id="reset"
+                class="hover:bg-gray-500 hover:text-white border-4 py-1 px-4 font-bold rounded-full">Reset</button>
+            </section>
+      
+            <!-- DRAGGABLE RULES -->
+            <section class="blocks border-4 h-1/4 p-2">
+              <ul id="css-props" data-class="draggable" class="flex-parent-props flex flex-wrap gap-2"></ul>
+            </section>
+          </section>
         </div>
-
-        <div
-          class="DISABLED_bg-lime-400 h-full grid text-2xl cursor-pointer font-bold DISABLED_place-items-center items-center ml-1"
-          id="info">Press click to start the game!</div>
-
-        <!-- DYNAMIC CONTENT HERE: -->
-        <div id="expected-container">
-          <!-- <h2 class="p-2 font-bold">...look like this</h2> -->
+        <div class="card__face card__face--back">
+          <div id="monaco-container"></div>
         </div>
+      </div>
+    </div>
 
-        <!-- CSS CODE SHOWS HERE -->
-        <div id="css-code" class="hidden border-2 shadow-lg border-black p-4 my-4">
-          <code>div.flex-parent { display:flex; justify-content:center; }</code>
-        </div>
-
-      </section>
-
-      <!-- CONTROLS -->
-      <section class="controls border-4 p-2">
-        <button id="reset"
-          class="hover:bg-gray-500 hover:text-white border-4 py-1 px-4 font-bold rounded-full">Reset</button>
-      </section>
-
-      <!-- DRAGGABLE RULES -->
-      <section class="blocks border-4 h-1/4 p-2">
-        <ul id="css-props" data-class="draggable" class="flex-parent-props flex flex-wrap gap-2"></ul>
-      </section>
-    </section>
   </main>
 
+  <!-- TRANSLATE TO OTHER LANGUAGES? -->
+  <script src="translation.js"></script>
+  <script src="css-properties.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
   <script src="emmet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.6.6/dragula.min.js"></script>
+  <!-- MONACO EDITOR: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd.md -->
+  <script src="libs/monaco-editor/min/vs/loader.js"></script>
+  <!-- EMMET FOR MONACO -->
+  <script src="https://unpkg.com/emmet-monaco-es/dist/emmet-monaco.min.js"></script>
+  <script src="libs/confettis.js"></script>
   <script src="app.js"></script>
 </body>
 

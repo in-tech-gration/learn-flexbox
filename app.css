@@ -56,7 +56,7 @@ body {
   padding: 2rem;
 }
 .game {
-  min-height: 80vh;
+  /* min-height: 80vh; */
 }
 .not-allowed {
   cursor: not-allowed;
@@ -76,6 +76,7 @@ body {
 }
 .block {
   outline: 2px solid #666;
+  background: white;;
 }
 #visual-expected {
   position: relative;
@@ -169,4 +170,205 @@ body {
   /* background-color: rgb(99 102 241); */
   outline: 1px solid slategrey;
   outline: 1px solid transparent;
+}
+
+/* ARROWS: LeaderLine */
+svg.leader-line {
+  z-index: 1000;
+}
+
+#debug-mode {
+  position: fixed;
+  top: 0;
+  right: 0;
+  font-size: 0.75rem;
+  padding: 0.25rem 1rem;
+  background-color: tomato;
+  color: white;
+}
+
+/* CARD FLIP */
+.scene {
+  perspective: 1200px;
+  min-height: 80vh;
+  background: black;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.card__face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+/* .card__face--front {} */
+
+.card__face--back {
+  background: #1e1e1e;
+  transform: rotateY(180deg);
+}
+
+/* CODE EDITOR SWITCH */
+#editor-switch {
+  margin: 0 auto;
+  cursor: pointer;
+  position: absolute;
+  top: -0.75rem;
+  right: 4rem;
+  font-size: 0.75rem;
+  padding: 0.2rem 1rem;
+  background: #333;
+  color: white;
+  border-radius: 24px;
+  z-index: 1000;
+  transition: all 400ms ease;
+  top: -2rem;
+}
+
+/* MONACO EDITOR */
+#monaco-container {
+  width: 100%;
+  height: 100%;
+}
+.card.is-flipped .card__face--front {
+  pointer-events: none;
+}
+
+/* SOUND BUTTON */
+.bar-c {
+  overflow: hidden;
+  height: 30px;
+  width: 40px;
+  margin: 0 auto;
+  cursor: pointer;
+  position: absolute;
+  top: -2.5rem;
+  right: 0;
+}
+
+.bar {
+  height: 1px;
+  width: 3px;
+  display: inline-block;
+  background-color: black;
+  bottom: 0;
+  position: absolute;
+  animation-duration: 500ms;
+  animation-play-state: running;
+  animation-direction: alternate;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.noAnim .bar {
+  animation: none;
+  animation-name: none;
+}
+
+.bar#bar-1 {
+  left: 0;
+  animation-name: danceHeight1;
+  animation-delay: 0ms;
+}
+
+.bar#bar-2 {
+  left: 6px;
+  animation-name: danceHeight2;
+  animation-delay: 300ms;
+}
+
+.bar#bar-3 {
+  left: 12px;
+  animation-name: danceHeight3;
+  animation-delay: 600ms;
+}
+
+.bar#bar-4 {
+  left: 18px;
+  animation-name: danceHeight4;
+  animation-delay: 900ms;
+}
+
+.bar#bar-5 {
+  left: 24px;
+  animation-name: danceHeight5;
+  animation-delay: 1200ms;
+}
+
+.bar#bar-6 {
+  left: 30px;
+  animation-name: danceHeight6;
+  animation-delay: 1500ms;
+}
+
+@keyframes danceHeight1 {
+  from {
+    height: 1px;
+  }
+
+  to {
+    height: 22px;
+  }
+}
+
+@keyframes danceHeight2 {
+  from {
+    height: 1px;
+  }
+
+  to {
+    height: 15px;
+  }
+}
+
+@keyframes danceHeight3 {
+  from {
+    height: 1px;
+  }
+
+  to {
+    height: 30px;
+  }
+}
+
+@keyframes danceHeight4 {
+  from {
+    height: 1px;
+  }
+
+  to {
+    height: 20px;
+  }
+}
+
+@keyframes danceHeight5 {
+  from {
+    height: 1px;
+  }
+
+  to {
+    height: 15px;
+  }
+}
+
+@keyframes danceHeight6 {
+  from {
+    height: 1px;
+  }
+
+  to {
+    height: 15px;
+  }
 }
