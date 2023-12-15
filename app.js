@@ -78,7 +78,7 @@ let gotoNextExercise = null;
 let music = null;
 // CONFIGURATION:
 let isPlaying = true;
-let debugMode = true; 
+let debugMode = false; 
 let currentLanguage = "en";
 // EXERCISES DATA:
 let totalExercises = null;
