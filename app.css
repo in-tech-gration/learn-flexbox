@@ -54,6 +54,7 @@ body {
   height: 100vh;
   background: #f0f0f0;
   padding: 2rem;
+  background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(185,195,206,1) 0%, rgba(244,243,240,1) 100%);
 }
 .game {
   /* min-height: 80vh; */
@@ -121,12 +122,56 @@ body {
   /* background: white; */
   padding: 0.25rem;
 }
+#samples-list-container {
+  position: relative;
+}
 #samples {
   max-height: 80vh;
 }
 #samples .docs {
   height: 4rem;
   transition: all 400ms linear;
+}
+#samples-list {
+  transition: all 300ms ease;
+}
+#samples-list[data-hints="hidden"] {
+  filter: blur(40px);
+}
+#samples-list[data-hints="off"] {
+  filter: blur(200px);
+}
+#no-hints,
+#hints-toggler {
+  position: absolute;
+  z-index: 10001;
+  top: 10%;
+  left: 0;
+  transition: all 200ms linear;
+  display: none;
+  transform: scale(0.85);
+}
+#hints-toggler {
+  cursor: pointer;
+}
+#draggable-rules[data-hints="baby"] {
+  display: none;
+}
+#no-hints[data-hints="off"]{
+  display: block;
+}
+#hints-toggler[data-hints="hidden"] {
+  display: block;
+}
+#hints-toggler:hover {
+  transform: scale(1);
+}
+#no-hints p,
+#hints-toggler p {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-top: -2rem;
 }
 .docs-block {
   background: rgba(0,0,0,0.25);

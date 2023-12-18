@@ -15,63 +15,8 @@ console.log("Let's learn Flexbox!");
 */
 
 const { clear, log } = console;
-const colors = ["indigo", "blue", "green", "red", "yellow", "pink", "teal", "purple", "sky"];
 const EXERCISE_UPDATE = "exercise-update";
-const propsList = {
-  display: [
-    {
-      rule: "flex",
-      className: "flex",
-      style: "display:flex"
-    }
-  ],
-  "flex-direction": [
-    {
-      rule: "row",
-      className: "flex-row",
-      style: "flex-direction: row"
-    },
-    {
-      rule: "row-reverse",
-      className: "flex-row-reverse",
-      style: "flex-direction: row-reverse"
-    }
-  ],
-  "justify-content": [
-    {
-      rule: "center",
-      className: "justify-center",
-      style: "justify-content:center"
-    },
-    {
-      rule: "space-between",
-      className: "justify-between",
-      style: "justify-content:space-between"
-    },
-    {
-      rule: "space-around",
-      className: "justify-around",
-      style: "justify-content:space-around"
-    }
-  ],
-  "align-items": [
-    {
-      rule: "flex-start",
-      className: "items-start",
-      style: "align-items:flex-start"
-    },
-    {
-      rule: "center",
-      className: "items-center",
-      style: "align-items:center"
-    },
-    {
-      rule: "flex-end",
-      className: "items-end",
-      style: "align-items:flex-end"
-    }
-  ]
-};
+
 let drake = null;
 let arrow = null;
 let gotoNextExercise = null;
@@ -80,6 +25,8 @@ let music = null;
 let isPlaying = true;
 let debugMode = false; 
 let currentLanguage = "en";
+// @ts-ignore
+let currentHintState = HINTS.on;
 // EXERCISES DATA:
 let totalExercises = null;
 let totalExercisesCounter = null;
@@ -146,14 +93,32 @@ function play( audioFile, loop = false ){
   return audio;
 }
 function renderSamplesToEl(propsList, el) {
+
   el.innerHTML = "";
   let counter = 0;
-  Object.entries(propsList).forEach(([parentRule, entries]) => {
+
+  return Object.entries(propsList).forEach(([parentRule, entries])=>{
+    el.insertAdjacentHTML("beforeEnd", sampleChapter({ title: parentRule }));
+
+    Object.entries(entries).forEach(([ruleValue,value])=>{
+      if ( ruleValue.startsWith("$$") ){
+        return;
+      }
+      if ( typeof value === "object" ){
+        const { className, style } = value;
+        el.insertAdjacentHTML("beforeEnd", sampleTemplate({ rule: parentRule, ruleValue, className, color: colors[counter++ % colors.length] }));
+      }
+    })
+  });
+
+
+  false && Object.entries(propsList).forEach(([parentRule, entries]) => {
     el.insertAdjacentHTML("beforeEnd", sampleChapter({ title: parentRule }));
     entries.forEach(({ rule: ruleValue, className, style }) => {
       el.insertAdjacentHTML("beforeEnd", sampleTemplate({ rule: parentRule, ruleValue, className, color: colors[counter++ % colors.length] }));
     })
-  })
+  });
+
 }
 function getDraggables() {
   return $$(`.docs-draggable, #visual-blocks, [data-class="draggable"]`);
@@ -221,9 +186,28 @@ function check(elA, elB, obj) {
 
 }
 function renderPropsToEl(propsList, el) {
+
   el.innerHTML = "";
   let c = 0;
-  Object.entries(propsList).forEach(([key, entries], idx) => {
+
+  return Object.entries(propsList).forEach(([parentRule, entries])=>{
+
+    Object.entries(entries).forEach(([ruleValue,value])=>{
+      if ( ruleValue.startsWith("$$") ){
+        return;
+      }
+      if ( typeof value === "object" ){
+        const { style } = value;
+        el.insertAdjacentHTML("beforeEnd", template({
+          textContent: style,
+          color: colors[c++ % colors.length]
+        }));
+  
+      }
+    })
+  });
+
+  false && Object.entries(propsList).forEach(([key, entries], idx) => {
     entries.forEach(({ rule, className, style }) => {
       el.insertAdjacentHTML("beforeEnd", template({
         textContent: style,
@@ -231,11 +215,18 @@ function renderPropsToEl(propsList, el) {
       }));
     })
   })
+
 }
 function renderExercise(options = {}) {
 
   const { level, title, cat, subcat, exercise, exerciseNum, hints } = options;
-  console.log(hints);
+
+  $samplesList.setAttribute("data-hints", hints);
+  $hintsToggler.setAttribute("data-hints", hints);
+  $noHints.setAttribute("data-hints", hints);
+  $draggableRules.setAttribute("data-hints", hints);
+  // @ts-ignore
+  currentHintState = HINTS[hints];
 
   pubSub.publish(EXERCISE_UPDATE, {
     title: 'Title',
@@ -295,6 +286,7 @@ function checkMatch(exercises, exercisesLength) {
     });
     
     if (match) {
+      // @ts-ignore
       console.log(translation[currentLanguage].isMatch);
       // console.log($visualBlocks.outerHTML.toString());
       // console.log($expected.outerHTML.toString());
@@ -329,7 +321,7 @@ function checkMatch(exercises, exercisesLength) {
         }
       }
     } else {
-
+      // @ts-ignore
       console.log(translation[currentLanguage].noMatch);
       // console.log($visualBlocks.outerHTML.toString());
       // console.log($expected.outerHTML.toString());
@@ -344,8 +336,8 @@ function reset() {
   const $expected = $("#expected");
 
   $visualBlocks.removeAttribute("style");
-  renderPropsToEl(propsList, $cssPropsEl);
-  // renderSamplesToEl(propsList, $samplesList); // <= Buggy
+  renderPropsToEl(flexboxProperties.parent, $cssPropsEl);
+  // renderSamplesToEl(flexboxProperties.parent, $samplesList); // <= Buggy?
   $draggableSamples.forEach(el => el.querySelector(".docs").removeAttribute("style"));
   $visualBlocks.classList.remove("matched");
   $expected.classList.remove("matched");
@@ -408,8 +400,8 @@ function initExercises(exercisesPack, startFrom = 0) {
     });
   }, 1000);
 
-  renderPropsToEl(propsList, $cssPropsEl);
-  renderSamplesToEl(propsList, $samplesList);
+  renderPropsToEl(flexboxProperties.parent, $cssPropsEl);
+  renderSamplesToEl(flexboxProperties.parent, $samplesList);
 
   let exercisesPackCopy = null;
 
@@ -463,21 +455,27 @@ function initExercises(exercisesPack, startFrom = 0) {
 
   function nextExercise() {
     const exercise = exercises.shift();
-    const { level, title, cat, subcat, hints = HINTS.on } = currentLevelPack;
+    // @ts-ignore
+    const { level, title, cat, subcat, hints = HINTS.on, skip } = currentLevelPack;
+
     const exerciseNum = ++currentExercise;
     totalExercisesCounter++;
 
     console.log("Jumping to next exercise...", { level, hints, exerciseNum });
 
-    renderExercise({ 
-        level, 
-        title, 
-        cat, 
-        subcat, 
-        exerciseNum, 
-        hints,
-        exercise  
-    });    
+    if ( !exercise.skip ){
+
+      renderExercise({ 
+          level, 
+          title, 
+          cat, 
+          subcat, 
+          exerciseNum, 
+          hints,
+          exercise  
+      });    
+
+    }
 
     if ( exercises.length === 0 ){
       currentExercise = 0;
@@ -486,6 +484,10 @@ function initExercises(exercisesPack, startFrom = 0) {
         exercises = currentLevelPack.exercises;
         exercisesLength = exercises.length;
       }
+    }
+
+    if ( exercise.skip ){
+      nextExercise();
     }
 
   }
@@ -605,92 +607,6 @@ function initMonacoEditor(){
 
   });
 }
-const HINTS = { on: "on", off: "off", hidden: "hidden" }
-const flexboxExercisesPack = [
-  {
-    level: 1,
-    title: null,
-    cat: "flexbox",
-    subcat: "parent-main",
-    hints: HINTS.on,
-    exercises: [
-      {
-        initial: `div#visual-blocks.block.p-4.shadow-lg>div.block.bg-green-200.!outline-none{1.1-Logo}+div.block.bg-green-400.!outline-none{1.1-Menu}+div.block.bg-green-600.!outline-none{1.1-Logout}`,
-
-        expected: `div#expected.block.p-4.shadow-lg.flex>div.block.bg-green-200.!outline-none{1.1-Logo}+div.block.bg-green-400.!outline-none{1.1-Menu}+div.block.bg-green-600.!outline-none{1.1-Logout}`,
-
-        points: 5
-
-      },
-      {
-        initial: `div#visual-blocks.block.p-4.shadow-lg>div.block.bg-green-200.!outline-none{1.2-Logo}+div.block.bg-green-400.!outline-none{1.2-Menu}+div.block.bg-green-600.!outline-none{1.2-Logout}`,
-
-        expected: `div#expected.block.p-4.shadow-lg.flex>div.block.bg-green-200.!outline-none{1.2-Logo}+div.block.bg-green-400.!outline-none{1.2-Menu}+div.block.bg-green-600.!outline-none{1.2-Logout}`,
-
-        // initial: `div#visual-blocks.block.p-4.shadow-lg>div.block{1.2-Logo}+div.block{1.2-Menu}+div.block{1.2-Logout}`,
-
-        // expected: `div#expected.block.p-4.shadow-lg.flex.flex-row-reverse>div.block{1.2-Logo}+div.block{1.2-Menu}+div.block{1.2-Logout}`,
-
-        points: 5
-      }
-    ],
-  },
-  {
-    level: 2,
-    title: null,
-    cat: "flexbox",
-    subcat: "parent-cross",
-    hints: HINTS.hidden,
-    exercises: [
-      {
-        initial: `div#visual-blocks.block.p-4.shadow-lg>div.block.bg-green-200.!outline-none{2.1-Logo}+div.block.bg-green-400.!outline-none{2.1-Menu}+div.block.bg-green-600.!outline-none{2.1-Logout}`,
-
-        expected: `div#expected.block.p-4.shadow-lg.flex>div.block.bg-green-200.!outline-none{2.1-Logo}+div.block.bg-green-400.!outline-none{2.1-Menu}+div.block.bg-green-600.!outline-none{2.1-Logout}`,
-
-        // initial: `div#visual-blocks.block.p-4.shadow-lg>div.block.bg-green-200.!outline-none{2.1-Logo}+div.block.bg-green-400.!outline-none{2.1-Menu}+div.block.bg-green-600.!outline-none{2.1-Logout}`,
-
-        // expected: `div#expected.block.p-4.shadow-lg.flex.justify-around>div.block.bg-green-200.!outline-none{2.1-Logo}+div.block.bg-green-400.!outline-none{2.1-Menu}+div.block.bg-green-600.!outline-none{2.1-Logout}`,
-
-        points: 10
-
-      },
-      {
-        initial: `div#visual-blocks.block.p-4.shadow-lg>div.block.bg-green-200.!outline-none{2.2-Logo}+div.block.bg-green-400.!outline-none{2.2-Menu}+div.block.bg-green-600.!outline-none{2.2-Logout}`,
-
-        expected: `div#expected.block.p-4.shadow-lg.flex>div.block.bg-green-200.!outline-none{2.2-Logo}+div.block.bg-green-400.!outline-none{2.2-Menu}+div.block.bg-green-600.!outline-none{2.2-Logout}`,
-
-        // initial: `div#visual-blocks.block.p-4.shadow-lg>div.block{2.2-Logo}+div.block{2.2-Menu}+div.block{2.2-Logout}`,
-
-        // expected: `div#expected.block.p-4.shadow-lg.flex.justify-between.items-end>div.block{2.2-Logo}+div.block{2.2-Menu}+div.block{2.2-Logout}`,
-
-        points: 10
-
-      },
-    ]
-  },
-  {
-    level: 3,
-    title: null,
-    cat: "flexbox",
-    subcat: "parent-reverse",
-    hints: HINTS.off,
-    exercises: [
-      {
-
-        initial: `div#visual-blocks.block.p-4.shadow-lg>div.block.bg-green-200.!outline-none{3.1-Logo}+div.block.bg-green-400.!outline-none{3.1-Menu}+div.block.bg-green-600.!outline-none{3.1-Logout}`,
-
-        expected: `div#expected.block.p-4.shadow-lg.flex>div.block.bg-green-200.!outline-none{3.1-Logo}+div.block.bg-green-400.!outline-none{3.1-Menu}+div.block.bg-green-600.!outline-none{3.1-Logout}`,
-
-        // initial: `div#visual-blocks.block.p-4.shadow-lg>div.block{3.1-Logo}+div.block{3.1-Menu}+div.block{3.1-Logout}`,
-
-        // expected: `div#expected.block.p-4.shadow-lg.flex.justify-between.flex-row-reverse>div.block{3.1-Logo}+div.block{3.1-Menu}+div.block{3.1-Logout}`,
-
-        points: 15
-
-      }
-    ]
-  }
-];
 
 // DOM ELEMENTS
 const $initialContainer  = $("#initial");
@@ -707,6 +623,9 @@ const $info              = $("#info");
 const $miniProgress      = $("#level-info__bg"); 
 const $cssCode           = $("#css-code");
 const $debugMode         = $("#debug-mode");
+const $hintsToggler      = $("#hints-toggler");
+const $noHints           = $("#no-hints");
+const $draggableRules    = $("#draggable-rules");
 
 let visualBlocksDefaultClass;
 
@@ -734,6 +653,20 @@ $info.addEventListener("click", e =>{
   gotoNextExercise = initExercises(flexboxExercisesPack);
   // initExercises(flexboxExercisesPack, 1); // TEST
   
+});
+$hintsToggler.addEventListener("click", e =>{
+  console.log("Toggle hints: ", { currentHintState });
+
+  const togglerState = $hintsToggler.getAttribute("data-hints");
+  $hintsToggler.removeAttribute("data-hints");
+  const samplesListState = $samplesList.getAttribute("data-hints");
+  $samplesList.removeAttribute("data-hints");
+
+  setTimeout(()=>{
+    $hintsToggler.setAttribute("data-hints", togglerState);
+    $samplesList.setAttribute("data-hints", samplesListState);
+  }, 3000);
+
 });
 
 if ( debugMode ){
@@ -778,7 +711,9 @@ animation: {
   });
 }
 
-// TODO:
+// TODO: INTEGRATE: https://codepen.io/kostasx/pen/QVZrzm
+// TODO: INTEGRATE: https://github.com/philipwalton/solved-by-flexbox/tree/master
+// INTEGRATE: https://codepen.io/chriscoyier/pen/vWEMWw
 // 1) Screen size check: < 1280px => Warning!
 // 2) Replicate: https://codepen.io/kostasx/pen/VwZVOMJ
 // 3) Replicate: https://codepen.io/kostasx/pen/wvwQbbd?editors=1100
@@ -791,3 +726,7 @@ animation: {
 // 7.2) Add all Flexbox properties, categorized under Parent and Child 
 // 7.3) Keep track of CSS rules applied to the target element (visual-blocks)
 // 8) Do not checkMatch when the rule is not dropped on a target
+
+// TODO: INTEGRATE ANINATIONS:
+// https://www.freecodecamp.org/news/flexbox-the-ultimate-css-flex-cheatsheet/
+// https://medium.com/free-code-camp/an-animated-guide-to-flexbox-d280cf6afc35

@@ -13,7 +13,7 @@
 <body>
 
   <div class="animated-text">
-    <h1 class="txt-pop">FLEXBOX</h1>
+    <h1 class="txt-pop">FLEXBOX BUNNIES</h1>
     <div class="wrapper"></div>
   </div>
 
@@ -55,7 +55,20 @@
       </h2>
       <hr>
       <!-- DYNAMIC CONTENT PLACED HERE -->
-      <div id="samples-list" class="mt-4"></div>
+      <div id="samples-list-container" class="mt-4">
+
+        <div id="hints-toggler">
+          <img src="img/hints.toggle.png" alt="">
+          <p>Click the Bunny Warrior to toggle hints</p>
+        </div>
+
+        <div id="no-hints">
+          <img src="img/hints.off.png" alt="">
+          <p>No visual hints at this level</p>
+        </div>
+
+        <div id="samples-list"></div>
+      </div>
     </section>
 
     <!-- PLAYGROUND -->
@@ -64,7 +77,7 @@
       <div class="card">
         <div class="card__face card__face--front">
           <section class="bg-white shadow-lg game flex h-full flex-col DISABLEw-3/4 gap-4 border-4 border-black p-2">
-            <section id="visual-expected" class="p-4 visual border-4 h-3/4">
+            <section id="visual-expected" class="p-4 visual border-4 DISABLED_h-3/4 flex-grow ">
       
               <div id="visual-expected__bg"></div>
       
@@ -100,7 +113,7 @@
             </section>
       
             <!-- DRAGGABLE RULES -->
-            <section class="blocks border-4 h-1/4 p-2">
+            <section id="draggable-rules" class="blocks border-4 DISABLED_h-1/4 p-2">
               <ul id="css-props" data-class="draggable" class="flex-parent-props flex flex-wrap gap-2"></ul>
             </section>
           </section>
@@ -114,8 +127,10 @@
   </main>
 
   <!-- TRANSLATE TO OTHER LANGUAGES? -->
+  <script src="configuration.js"></script>
   <script src="translation.js"></script>
   <script src="css-properties.js"></script>
+  <script src="exercises.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/leader-line@1.0.7/leader-line.min.js"></script>
   <script src="emmet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.6.6/dragula.min.js"></script>
