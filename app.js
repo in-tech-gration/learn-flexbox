@@ -376,6 +376,9 @@ function initExercises(exercisesPack, startFrom = 0) {
 
   const decodedExercises = hasUriEncodedExercises(); 
 
+  $draggableRules.classList.remove("hidden");
+  $controls.classList.remove("hidden");
+
   $info.innerHTML = "";
   $info.removeAttribute("class");
   $("#visual-expected__bg").classList.add('!opacity-25');
@@ -497,7 +500,9 @@ function initExercises(exercisesPack, startFrom = 0) {
   // Guide
   if ( !debugMode ){
     // @ts-ignore
-    arrow = createArrow('.css-prop:first-child', '#visual-blocks', "Drag CSS rule and drop it onto the parent element", { fromAnchor: "bottomCenter" });
+    // arrow = createArrow('.css-prop:first-child', '#visual-blocks', "Drag CSS rule and drop it onto the parent element", { fromAnchor: "bottomCenter" });
+
+    // arrow = createArrow("#samples-list .docs:first-child", '#visual-blocks', "Drag CSS rule and drop it onto the parent element", { fromAnchor: "bottomCenter" });
   }
   
   // @ts-ignore
@@ -620,6 +625,7 @@ const $visualExpected    = $("#visual-expected");
 const $levelNum          = $("#level");
 const $exerciseNum       = $("#exercise");
 const $info              = $("#info");
+const $controls          = $("#controls");
 const $miniProgress      = $("#level-info__bg"); 
 const $cssCode           = $("#css-code");
 const $debugMode         = $("#debug-mode");
@@ -655,7 +661,8 @@ $info.addEventListener("click", e =>{
   
 });
 $hintsToggler.addEventListener("click", e =>{
-  console.log("Toggle hints: ", { currentHintState });
+
+  // console.log("Toggle hints: ", { currentHintState });
 
   const togglerState = $hintsToggler.getAttribute("data-hints");
   $hintsToggler.removeAttribute("data-hints");
@@ -711,6 +718,7 @@ animation: {
   });
 }
 
+// TODO: WARN NEWBIES ABOUT display:flex|inline-flex required for rest of props
 // TODO: INTEGRATE: https://codepen.io/kostasx/pen/QVZrzm
 // TODO: INTEGRATE: https://github.com/philipwalton/solved-by-flexbox/tree/master
 // INTEGRATE: https://codepen.io/chriscoyier/pen/vWEMWw

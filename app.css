@@ -93,17 +93,17 @@ body {
   height: 100%;
   z-index: -1;
   background-position: 0% 80%;
-  animation: gradient 2s ease 1 forwards;
+  animation: sweep-in 2s ease 1 forwards;
   opacity: 0;
 }
 
-@keyframes gradient {
+@keyframes sweep-in {
   0% {
-      background-position: 30% 0%;
+      background-position: 0% 0%;
       opacity: 0;
     }
   100% {
-      background-position: 100% 0%;
+      background-position: 90% 0%;
       opacity: 1;
     }
 }
@@ -111,6 +111,17 @@ body {
 #info {
   position: relative;
   z-index: 3;
+  animation: fade-in 3s ease 1 forwards;
+  opacity: 0;
+}
+
+@keyframes fade-in {
+  0% {
+      opacity: 0;
+    }
+  100% {
+      opacity: 1;
+    }
 }
 
 #visual-blocks, #expected {
