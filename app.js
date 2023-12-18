@@ -75,10 +75,11 @@ const sampleChapter = ({ title }) => {
   `;
 }
 const sampleTemplate = ({ rule, ruleValue, className, color }) => {
+
   return `
     <h3 class="font-bold px-2 text-right mr-1">${ruleValue}</h3>
     <div class="docs-draggable">
-      <div data-style="${`${rule}:${ruleValue}`}" class="docs p-1 flex bg-${color}-500 ${className} m-2 text-white font-bold" id="${ruleValue}">
+      <div data-rule="${rule}" data-style="${`${rule}:${ruleValue}`}" class="docs p-1 flex bg-${color}-500 ${className} m-2 text-white font-bold" id="${ruleValue}">
         <div class="docs-block">A</div>
         <div class="docs-block">B</div>
         <div class="docs-block">C</div>
@@ -656,6 +657,7 @@ $resetBtn.addEventListener("click", reset);
 $cssPropsEl.addEventListener("click", resetAppliedProp);
 $info.addEventListener("click", e =>{
 
+  // @ts-ignore
   gotoNextExercise = initExercises(flexboxExercisesPack);
   // initExercises(flexboxExercisesPack, 1); // TEST
   
@@ -718,6 +720,7 @@ animation: {
   });
 }
 
+// TODO: WARN NEWBIES ABOUT unnecessary rules, e.g. flex-wrap, when only display: flex is needed
 // TODO: WARN NEWBIES ABOUT display:flex|inline-flex required for rest of props
 // TODO: INTEGRATE: https://codepen.io/kostasx/pen/QVZrzm
 // TODO: INTEGRATE: https://github.com/philipwalton/solved-by-flexbox/tree/master

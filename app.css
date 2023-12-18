@@ -140,17 +140,23 @@ body {
   max-height: 80vh;
 }
 #samples .docs {
-  height: 4rem;
+  min-height: 4rem;
   transition: all 400ms linear;
 }
 #samples-list {
   transition: all 300ms ease;
+}
+#samples-list .docs {
+  gap: 0.2rem;
 }
 #samples-list[data-hints="hidden"] {
   filter: blur(40px);
 }
 #samples-list[data-hints="off"] {
   filter: blur(200px);
+}
+#samples-list .docs[data-rule="flex-wrap"] .docs-block {
+  width: 40%;
 }
 #no-hints,
 #hints-toggler {

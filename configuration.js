@@ -15,7 +15,8 @@ const flexboxProperties = {
         style: "display: flex"
       },
       // "inline-flex": {
-
+      //   className: "",
+      //   style: ""
       // }
     },
     "flex-direction": {
@@ -28,19 +29,40 @@ const flexboxProperties = {
         className: "flex-row-reverse",
         style: "flex-direction: row-reverse"
       },
-      // column: {},
-      // "column-reverse": {}
+      column: {
+        className: "flex-col",
+        style: "flex-direction: column"
+      },
+      "column-reverse": {
+        className: "flex-col-reverse",
+        style: "flex-direction: column-reverse"
+      }
     },
-    // "flex-wrap": {
-    //   $$default: "no-wrap",
-    //   wrap: {},
-    //   "no-wrap": {},
-    //   "wrap-reverse": {}
-    // },
+    "flex-wrap": {
+      $$default: "nowrap",
+      wrap: {
+        className: "flex-wrap",
+        style: "wrap"
+      },
+      "nowrap": {
+        className: "flex-nowrap",
+        style: "nowrap"
+      },
+      "wrap-reverse": {
+        className: "flex-wrap-reverse",
+        style: "wrap-reverse"
+      }
+    },
     "justify-content":{
       $$default: "flex-start", 
-      // "flex-start":{},
-      // "flex-end":{},
+      // "flex-start":{
+      //   className: "",
+      //   style: ""
+      // },
+      // "flex-end":{
+      //   className: "",
+      //   style: ""
+      // },
       center:{
         className: "justify-center",
         style: "justify-content:center"
@@ -53,7 +75,10 @@ const flexboxProperties = {
         className: "justify-around",
         style: "justify-content:space-around"
       },
-      // "space-evenly":{}
+      // "space-evenly":{
+      //   className: "",
+      //   style: ""
+      // }
     },
     "align-items":{
       $$default: "normal",
@@ -69,17 +94,41 @@ const flexboxProperties = {
         className: "items-center",
         style: "align-items:center"
       },
-      // "baseline": {},
-      // "stretch": {},
+      // "baseline": {
+      //   className: "",
+      //   style: ""
+      // },
+      // "stretch": {
+      //   className: "",
+      //   style: ""
+      // },
     },
     // "align-content":{
     //   $$default: "normal",
-    //   "flex-start":{},
-    //   "flex-end":{},
-    //   "center":{},
-    //   "space-between":{},
-    //   "space-around":{},
-    //   "stretch":{}
+    //   "flex-start":{
+    //     className: "",
+    //     style: ""
+    //   },
+    //   "flex-end":{
+    //     className: "",
+    //     style: ""
+    //   },
+    //   "center":{
+    //     className: "",
+    //     style: ""
+    //   },
+    //   "space-between":{
+    //     className: "",
+    //     style: ""
+    //   },
+    //   "space-around":{
+    //     className: "",
+    //     style: ""
+    //   },
+    //   "stretch":{
+    //     className: "",
+    //     style: ""
+    //   }
     // },
     // "gap": {},
     // "row-gap": {},
@@ -97,6 +146,7 @@ const flexboxProperties = {
   }
 } // Sources: https://flexbox.malven.co/, 
 
+// DEPRECATED LIST:
 const propsList = {
   display: [
     {
