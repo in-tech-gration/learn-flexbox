@@ -17,11 +17,15 @@ console.log("Let's learn Flexbox!");
 const { clear, log } = console;
 const EXERCISE_UPDATE = "exercise-update";
 
-let drake = null;
-let arrow = null;
-let gotoNextExercise = null;
-let music = null;
+let drake               = null;
+let arrow               = null;
+let gotoNextExercise    = null;
+let music               = null;
+let isEditorInitialized = false;
+let editor              = null;
+let activeContainer     = null;
 // CONFIGURATION:
+const visualExpectedDefaultClasses = "p-4 visual border-4 flex-grow";
 let isPlaying = true;
 let debugMode = false; 
 let currentLanguage = "en";
@@ -222,6 +226,14 @@ function renderExercise(options = {}) {
 
   const { level, title, cat, subcat, exercise, exerciseNum, hints } = options;
 
+  // If the exercise contains custom CSS classes, append them to the default:
+  if ( exercise.parentClasses ){
+    $visualExpected.classList.add(...exercise.parentClasses.split(" "));
+  // Otherwise, just reset to the defaults:
+  } else {
+    $visualExpected.setAttribute("class", visualExpectedDefaultClasses);
+  }
+
   $samplesList.setAttribute("data-hints", hints);
   $hintsToggler.setAttribute("data-hints", hints);
   $noHints.setAttribute("data-hints", hints);
@@ -248,7 +260,16 @@ function renderExercise(options = {}) {
   `
 
   const $visualBlocks = $("#visual-blocks");
-  visualBlocksDefaultClass = $visualBlocks.className;
+  try {
+    visualBlocksDefaultClass = $visualBlocks.className;
+  } catch(e){
+    console.log(e);
+    return $expectedContainer.innerHTML = `
+    <h2 class="p-2 font-bold text-red-500 text-xl">Ops! Looks that something went wrong with this exercise. Please check your setup.</h2>
+    <p class="p-2 font-bold text-red-500">Error message: ${e.message}</p>
+    <p class="p-2 font-bold text-red-500">${e.stack}</p>
+  `;
+  }
 
   if (drake) {
     drake.destroy();
@@ -377,18 +398,22 @@ function initExercises(exercisesPack, startFrom = 0) {
 
   const decodedExercises = hasUriEncodedExercises(); 
 
+  // Display Level Info:
+  $levelInfo.classList.remove("text-gray-400");
+
   $draggableRules.classList.remove("hidden");
   $controls.classList.remove("hidden");
 
-  $info.innerHTML = "";
-  $info.removeAttribute("class");
+  $infoContainer.innerHTML = "";
+  $infoContainer.removeAttribute("class");
   $("#visual-expected__bg").classList.add('!opacity-25');
 
   play("mixkit-dagger-woosh-1487.wav");
 
   setTimeout(()=>{
 
-    music = play("mixkit-im-working-449.mp3");
+    music = play("mixkit-im-working-449.mp3", true);
+    // music = play("mixkit-games-worldbeat-466.mp3");
     const $soundBar = $(".bar-c"); 
     isPlaying && $soundBar.classList.remove("noAnim");
     $soundBar.addEventListener("click", e =>{
@@ -404,7 +429,9 @@ function initExercises(exercisesPack, startFrom = 0) {
     });
   }, 1000);
 
+  // @ts-ignore
   renderPropsToEl(flexboxProperties.parent, $cssPropsEl);
+  // @ts-ignore
   renderSamplesToEl(flexboxProperties.parent, $samplesList);
 
   let exercisesPackCopy = null;
@@ -588,12 +615,17 @@ function initDrakeEvents() {
 }
 function initMonacoEditor(){
 
+  if ( isEditorInitialized ){
+    return;
+  }
+  isEditorInitialized = true;
+  
   // @ts-ignore
   require.config({ paths: { vs: 'libs/monaco-editor/min/vs' } });
   // @ts-ignore
   require(['vs/editor/editor.main'], function () {
     // @ts-ignore
-    var editor = monaco.editor.create(document.getElementById('monaco-container'), {
+    editor = monaco.editor.create($('#monaco-container'), {
       value: [
         '',
         '<main>',
@@ -615,24 +647,35 @@ function initMonacoEditor(){
 }
 
 // DOM ELEMENTS
-const $initialContainer  = $("#initial");
+const $about             = $("#about");
+const $aboutContainer    = $("#about-container");
+const $card              = $('.card'); 
+const $controls          = $("#controls");
+const $cssCode           = $("#css-code");
 const $cssPropsEl        = $("#css-props");
+const $debugMode         = $("#debug-mode");
+const $draggableRules    = $("#draggable-rules");
+const $editorContainer   = $("#monaco-container");
+const $editorSwitch      = $('#editor-switch');
+const $exerciseNum       = $("#exercise");
 const $expectedContainer = $("#expected-container");
+const $flipBackBtn       = $(".flip-back")
+const $hintsToggler      = $("#hints-toggler");
+const $info              = $("#info");
+const $infoContainer     = $("#info-container");
+const $initialContainer  = $("#initial");
+const $instructions      = $("#instructions");
+const $instructionsContainer 
+                         = $("#instructions-container");
+const $levelInfo         = $("#level-info");
+const $levelNum          = $("#level");
+const $miniProgress      = $("#level-info__bg"); 
+const $noHints           = $("#no-hints");
 const $progress          = $("#progress");
 const $resetBtn          = $("#reset");
 const $samples           = $("#samples");
 const $samplesList       = $("#samples-list");
 const $visualExpected    = $("#visual-expected");
-const $levelNum          = $("#level");
-const $exerciseNum       = $("#exercise");
-const $info              = $("#info");
-const $controls          = $("#controls");
-const $miniProgress      = $("#level-info__bg"); 
-const $cssCode           = $("#css-code");
-const $debugMode         = $("#debug-mode");
-const $hintsToggler      = $("#hints-toggler");
-const $noHints           = $("#no-hints");
-const $draggableRules    = $("#draggable-rules");
 
 let visualBlocksDefaultClass;
 
@@ -679,18 +722,18 @@ $hintsToggler.addEventListener("click", e =>{
 });
 
 if ( debugMode ){
+  // @ts-ignore
   gotoNextExercise = initExercises(flexboxExercisesPack);
-  initMonacoEditor();
   $debugMode.classList.remove("hidden");
   isPlaying = false;
 }
 
-var $editorSwitch = document.querySelector('#editor-switch');
-
 if ( $editorSwitch ){
   $editorSwitch.addEventListener( 'click', function() {
-    const $card = document.querySelector('.card'); 
+    initMonacoEditor();
     $card && $card.classList.toggle('is-flipped');
+    activeContainer = $editorContainer;
+    $editorContainer.classList.remove("hidden");
   });
 }
 
@@ -699,6 +742,28 @@ $debugMode.addEventListener("click", e =>{
     In debug mode: 
     1) Music is off
   `);
+});
+
+$instructions.addEventListener("click", e =>{
+  log("Instructions");
+  $card && $card.classList.toggle('is-flipped');
+  activeContainer = $instructionsContainer;
+  $instructionsContainer.classList.remove("hidden");
+});
+
+$about.addEventListener("click", e =>{
+  log("About");
+  $card && $card.classList.toggle('is-flipped');
+  activeContainer = $aboutContainer;
+  $aboutContainer.classList.remove("hidden");
+});
+
+$flipBackBtn.addEventListener("click", e =>{
+  log("Flip back");
+  $card && $card.classList.toggle('is-flipped');
+  setTimeout(()=>{
+    activeContainer.classList.add("hidden");
+  }, 1000);
 });
 
 // gotoNextExercise = initExercises(flexboxExercisesPack);
@@ -720,6 +785,18 @@ animation: {
   });
 }
 
+// TODO: Add Skip to next exercise
+// TODO: Exercises should contain custom (general) CSS, e.g. * { box-sizing: border-box; }
+// TODO: Warn about missing #visual-blocks and #expected classes on exercise parent elements
+// TODO: Exercises should contain block EXTRAS, e.g. aspect-ratio: 1/1;
+// TODO: Layout view can switch from vertical to horizontal (2 rows vs 2 cols)
+// TODO: Display applied styles as <code>
+// TODO: Left Panel, click and disable applied rule
+// TODO: Music Switcher
+// TODO: Loading indicator (images, sound, etc.)
+// TODO: Track Levels via global state
+// TODO: NEWBIE (BABY) LEVEL 1: Disable flex container rules unless flex or inline-flex are dragged (gray-out non active flexbox rules if NO flexbox!)
+// TODO: NEWBIE (BABY) LEVEL 1: Show required colors in the target!
 // TODO: WARN NEWBIES ABOUT unnecessary rules, e.g. flex-wrap, when only display: flex is needed
 // TODO: WARN NEWBIES ABOUT display:flex|inline-flex required for rest of props
 // TODO: INTEGRATE: https://codepen.io/kostasx/pen/QVZrzm

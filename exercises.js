@@ -161,6 +161,13 @@ const flexboxExercisesPack = [
         points: 10
 
       },
+      {
+        parentClasses: "flex justify-evenly",
+
+        initial: `section#visual-blocks.w-52.!h-fit.p-2.border-2.border-gray-400>.w-1/3.border-4.border-black.aspect-square.grid.place-items-center.text-2xl*9{$}`,
+
+        expected: `section#expected.w-52.!h-fit.flex.flex-wrap.p-2.border-2.border-gray-400>.w-1/3.border-4.border-black.aspect-square.grid.place-items-center.text-2xl*9{$}`
+      },
     ]
   },
   {

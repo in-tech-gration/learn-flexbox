@@ -7,6 +7,8 @@ const HINTS  = {
 
 const colors = ["indigo", "blue", "green", "red", "yellow", "pink", "teal", "purple", "sky"];
 
+const $$parentPropertiesDependencies = { $$dependsOn: "display" }
+
 const flexboxProperties = {
   parent: {
     display: {
@@ -14,12 +16,13 @@ const flexboxProperties = {
         className: "flex",
         style: "display: flex"
       },
-      // "inline-flex": {
-      //   className: "",
-      //   style: ""
-      // }
+      "inline-flex": {
+        className: "inline-flex",
+        style: "display: inline-flex"
+      }
     },
     "flex-direction": {
+      ...$$parentPropertiesDependencies,
       $$default: "row",
       row: {
         className: "flex-row",
@@ -39,6 +42,7 @@ const flexboxProperties = {
       }
     },
     "flex-wrap": {
+      ...$$parentPropertiesDependencies,
       $$default: "nowrap",
       wrap: {
         className: "flex-wrap",
@@ -54,15 +58,16 @@ const flexboxProperties = {
       }
     },
     "justify-content":{
+      ...$$parentPropertiesDependencies,
       $$default: "flex-start", 
-      // "flex-start":{
-      //   className: "",
-      //   style: ""
-      // },
-      // "flex-end":{
-      //   className: "",
-      //   style: ""
-      // },
+      "flex-start":{
+        className: "justify-start",
+        style: "justify-content: flex-start"
+      },
+      "flex-end":{
+        className: "justify-end",
+        style: "justify-content: flex-end"
+      },
       center:{
         className: "justify-center",
         style: "justify-content:center"
@@ -75,12 +80,13 @@ const flexboxProperties = {
         className: "justify-around",
         style: "justify-content:space-around"
       },
-      // "space-evenly":{
-      //   className: "",
-      //   style: ""
-      // }
+      "space-evenly":{
+        className: "justify-evenly",
+        style: "justify-content:space-evenly"
+      }
     },
     "align-items":{
+      ...$$parentPropertiesDependencies,
       $$default: "normal",
       "flex-start": {
         className: "items-start",
@@ -104,6 +110,7 @@ const flexboxProperties = {
       // },
     },
     // "align-content":{
+      // ...$$parentPropertiesDependencies,
     //   $$default: "normal",
     //   "flex-start":{
     //     className: "",
