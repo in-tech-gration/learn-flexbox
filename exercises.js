@@ -113,6 +113,22 @@ const _flexboxExercisesPack = [
 // FULL PACK:
 const flexboxExercisesPack = [
   {
+    level: 0,
+    title: "Newbie",
+    cat: "Introductory",
+    subcat: "Learn how the game works",
+    hints: HINTS.baby,
+    exercises: [
+      {
+
+        initial: `#visual-blocks.docs.p-1.bg-indigo-500.m-2.text-white.font-bold.gap-1>.docs-block{A}+.docs-block{B}+.docs-block{C}`,
+
+        expected: `#expected.docs.p-1.flex.bg-indigo-500.m-2.text-white.font-bold.gap-1>.docs-block{A}+.docs-block{B}+.docs-block{C}`,
+        points: 1
+      }
+    ]
+  },
+  {
     level: 1,
     title: null,
     cat: "flexbox",

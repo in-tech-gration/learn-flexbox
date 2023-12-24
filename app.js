@@ -24,6 +24,7 @@ let music               = null;
 let isEditorInitialized = false;
 let editor              = null;
 let activeContainer     = null;
+let extraBgClasses      = null;
 // CONFIGURATION:
 const visualExpectedDefaultClasses = "p-4 visual border-4 flex-grow";
 let isPlaying = true;
@@ -177,6 +178,7 @@ function check(elA, elB, obj) {
   const compStylesA = getComputedStyle(elA);
   const compStylesB = getComputedStyle(elB);
 
+  // @ts-ignore
   const hasConflict = CSS_PROPERTIES.some(prop => {
     const same = compStylesB.getPropertyValue(prop) === compStylesA.getPropertyValue(prop);
     if (!same) {
@@ -260,6 +262,8 @@ function renderExercise(options = {}) {
   `
 
   const $visualBlocks = $("#visual-blocks");
+  // Detect any extra bg-* classes that might exist on the initial/expected examples:
+  extraBgClasses = Array.from($visualBlocks.classList).find(c => c.startsWith("bg-"));
   try {
     visualBlocksDefaultClass = $visualBlocks.className;
   } catch(e){
@@ -394,22 +398,7 @@ function hasUriEncodedExercises(){
     return decodedExercises;
   
 }
-function initExercises(exercisesPack, startFrom = 0) {
-
-  const decodedExercises = hasUriEncodedExercises(); 
-
-  // Display Level Info:
-  $levelInfo.classList.remove("text-gray-400");
-
-  $draggableRules.classList.remove("hidden");
-  $controls.classList.remove("hidden");
-
-  $infoContainer.innerHTML = "";
-  $infoContainer.removeAttribute("class");
-  $("#visual-expected__bg").classList.add('!opacity-25');
-
-  play("mixkit-dagger-woosh-1487.wav");
-
+function initMusic(){
   setTimeout(()=>{
 
     music = play("mixkit-im-working-449.mp3", true);
@@ -428,6 +417,24 @@ function initExercises(exercisesPack, startFrom = 0) {
       }
     });
   }, 1000);
+}
+function initExercises(exercisesPack, startFrom = 0) {
+
+  const decodedExercises = hasUriEncodedExercises(); 
+
+  // Display Level Info:
+  $levelInfo.classList.remove("text-gray-400");
+
+  $draggableRules.classList.remove("hidden");
+  $controls.classList.remove("hidden");
+
+  $infoContainer.innerHTML = "";
+  $infoContainer.removeAttribute("class");
+  $("#visual-expected__bg").classList.add('!opacity-25');
+
+  play("mixkit-dagger-woosh-1487.wav");
+
+  initMusic();
 
   // @ts-ignore
   renderPropsToEl(flexboxProperties.parent, $cssPropsEl);
@@ -606,9 +613,15 @@ function initDrakeEvents() {
       }
     })
     .on("out", function (el, container) {
-      const dragElBgClass = Array.from(el.classList).find(c => c.startsWith("bg-"));
+      const dragElBgClass = Array.from(el.classList).find(c => {
+        return c.startsWith("bg-")
+      });
       if (dragElBgClass && container.getAttribute("id") === "visual-blocks") {
-        container.classList.remove(dragElBgClass);
+        console.log({ extraBgClasses });
+        if( dragElBgClass !== extraBgClasses ){
+          container.classList.remove(dragElBgClass);
+          extraBgClasses = null;
+        }
       }
     });
 
@@ -766,8 +779,6 @@ $flipBackBtn.addEventListener("click", e =>{
   }, 1000);
 });
 
-// gotoNextExercise = initExercises(flexboxExercisesPack);
-
 // ANIMATION
 animation: {
   break animation;
@@ -784,37 +795,3 @@ animation: {
     }
   });
 }
-
-// TODO: Add Skip to next exercise
-// TODO: Exercises should contain custom (general) CSS, e.g. * { box-sizing: border-box; }
-// TODO: Warn about missing #visual-blocks and #expected classes on exercise parent elements
-// TODO: Exercises should contain block EXTRAS, e.g. aspect-ratio: 1/1;
-// TODO: Layout view can switch from vertical to horizontal (2 rows vs 2 cols)
-// TODO: Display applied styles as <code>
-// TODO: Left Panel, click and disable applied rule
-// TODO: Music Switcher
-// TODO: Loading indicator (images, sound, etc.)
-// TODO: Track Levels via global state
-// TODO: NEWBIE (BABY) LEVEL 1: Disable flex container rules unless flex or inline-flex are dragged (gray-out non active flexbox rules if NO flexbox!)
-// TODO: NEWBIE (BABY) LEVEL 1: Show required colors in the target!
-// TODO: WARN NEWBIES ABOUT unnecessary rules, e.g. flex-wrap, when only display: flex is needed
-// TODO: WARN NEWBIES ABOUT display:flex|inline-flex required for rest of props
-// TODO: INTEGRATE: https://codepen.io/kostasx/pen/QVZrzm
-// TODO: INTEGRATE: https://github.com/philipwalton/solved-by-flexbox/tree/master
-// INTEGRATE: https://codepen.io/chriscoyier/pen/vWEMWw
-// 1) Screen size check: < 1280px => Warning!
-// 2) Replicate: https://codepen.io/kostasx/pen/VwZVOMJ
-// 3) Replicate: https://codepen.io/kostasx/pen/wvwQbbd?editors=1100
-// https://codepen.io/kostasx/pen/OJLXyBw
-// 4) LEVEL: INTERMEDIATE (HIDE/TOGGLE Samples) => LEVEL (ADVANCED): Hide Samples!!!
-// 5) Update: Level 1 - Exercise 1 => Level 1 - Exercise 2 => Level 2 - Exercise 1
-// 6) Ability to drop left-hand-side rules! (Beginner level)
-// 7)
-// 7.1) When Screen width gets lower than accepted for playing the game, display warning modal (Please use a larger screen size, the game was not intended for small screen sizes and mobile devices)
-// 7.2) Add all Flexbox properties, categorized under Parent and Child 
-// 7.3) Keep track of CSS rules applied to the target element (visual-blocks)
-// 8) Do not checkMatch when the rule is not dropped on a target
-
-// TODO: INTEGRATE ANINATIONS:
-// https://www.freecodecamp.org/news/flexbox-the-ultimate-css-flex-cheatsheet/
-// https://medium.com/free-code-camp/an-animated-guide-to-flexbox-d280cf6afc35
