@@ -4,6 +4,8 @@
 
 ## Todo
 
+  - Integrate: https://pjmazenot.github.io/steps.js/
+
   - Add all Flexbox properties, categorized under Parent and Child 
 
   - Add Skip to next exercise button
