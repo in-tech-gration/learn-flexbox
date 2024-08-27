@@ -1,4 +1,4 @@
-// TEST PACK:
+// TEST PACK: Used for developing and debugging level-settings 
 const _flexboxExercisesPack = [
   {
     level: 1,
@@ -113,7 +113,7 @@ const _flexboxExercisesPack = [
 // FULL PACK:
 const flexboxExercisesPack = [
   {
-    level: 0,
+    level: 1,
     title: "Newbie",
     cat: "Introductory",
     subcat: "Learn how the game works",
@@ -129,7 +129,7 @@ const flexboxExercisesPack = [
     ]
   },
   {
-    level: 1,
+    level: 2,
     title: null,
     cat: "flexbox",
     subcat: "parent-main",
@@ -153,7 +153,7 @@ const flexboxExercisesPack = [
     ],
   },
   {
-    level: 2,
+    level: 3,
     title: null,
     cat: "flexbox",
     subcat: "parent-cross",
@@ -187,7 +187,7 @@ const flexboxExercisesPack = [
     ]
   },
   {
-    level: 3,
+    level: 4,
     title: null,
     cat: "flexbox",
     subcat: "parent-reverse",
@@ -205,7 +205,7 @@ const flexboxExercisesPack = [
     ]
   },
   {
-    level: 4,
+    level: 5,
     title: null,
     cat: "flexbox",
     subcat: "parent-reverse",
