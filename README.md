@@ -2,6 +2,8 @@
 
 [Demo](https://in-tech-gration.github.io/learn-flexbox/)
 
+![](./img/Flexbox.Bunnies.jpg)
+
 ## Let's learn some CSS Flexbox properties
 
 ## Todo
